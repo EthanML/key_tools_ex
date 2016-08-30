@@ -1,11 +1,10 @@
 defmodule KeyToolsTest do
   use ExUnit.Case, async: true
-  import KeyTools, only: [atomize_keys: 1,
-                          underscore_keys: 1]
+  import KeyTools
   doctest KeyTools
 
-  describe "Payload.atomize_keys/1" do
-    test "converts a map's string keys to atoms" do
+  describe "KeyTools.atomize_keys/1" do
+    test "atomizes a map's string keys" do
       string_keys = %{"a" => 1, "b" => 2}
       atom_keys = %{a: 1, b: 2}
       assert atomize_keys(string_keys) == atom_keys
@@ -28,7 +27,7 @@ defmodule KeyToolsTest do
     end
   end
 
-  describe "Payload.underscore_keys/1" do
+  describe "KeyTools.underscore_keys/1" do
     test "converts a map's string keys to snake case" do
       camel_keys = %{"camelKeyOne" => "String val", "camelKeyTwo" => 2}
       snake_keys = %{"camel_key_one" => "String val", "camel_key_two" => 2}
