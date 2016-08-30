@@ -39,7 +39,7 @@ Note that this library uses and thus is bound by the same limitations detailed i
 
 ## Installation
 
-How to install from Hex:
+How to install from [Hex](https://hex.pm/packages/key_tools):
 
   1. Add `key_tools` to your list of dependencies in `mix.exs`:
 

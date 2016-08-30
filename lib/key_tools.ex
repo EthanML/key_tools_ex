@@ -4,7 +4,7 @@ defmodule KeyTools do
   """
 
   @doc """
-  Recursively converts all string keys within the given `Map` or `List` to atoms.
+  Deeply converts all string keys within the given `Map` or `List` to atoms.
 
   ## Examples
 
@@ -25,6 +25,7 @@ defmodule KeyTools do
   Deeply converts all camelCased keys within the given `Map` or `List` to snake_case.
 
   Affects only keys; values will remain unchanged. Works on string and atom keys.
+
   The same limitations detailed in the docs for `Macro.Underscore` apply here,
   so be careful if there is potential for non-standard within your keys.
 
