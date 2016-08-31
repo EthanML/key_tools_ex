@@ -47,10 +47,6 @@ defmodule KeyTools do
     end
   end
 
-  def underscore_keys(list) when is_list(list) do
-    Enum.map list, &underscore_keys/1
-  end
-
   def underscore_keys(atom) when is_atom(atom) do
     atom
     |> Atom.to_string
@@ -58,6 +54,7 @@ defmodule KeyTools do
     |> String.to_atom
   end
 
+  def underscore_keys(list) when is_list(list), do: Enum.map list, &underscore_keys/1
   def underscore_keys(anything), do: anything
 
   @doc """

@@ -55,7 +55,7 @@ How to install from [Hex](https://hex.pm/packages/key_tools):
 
     ```elixir
     def deps do
-      [{:key_tools, "~> 0.1.0"}]
+      [{:key_tools, "~> 0.2"}]
     end
     ```
 
