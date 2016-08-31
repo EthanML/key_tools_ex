@@ -27,7 +27,7 @@ defmodule KeyTools do
   Affects only keys; values will remain unchanged. Works on string and atom keys.
 
   The same limitations detailed in the docs for `Macro.Underscore` apply here,
-  so be careful if there is potential for non-standard within your keys.
+  so be careful if there is potential for non-standard characters within your keys.
 
   ## Examples
 
