@@ -37,6 +37,16 @@ Note that this library uses and thus is bound by the same limitations detailed i
 
 ...so be careful if you're likely to have to deal with any unusual characters in your keys.
 
+## Current Functions
+
+Current functions include:
+
+- `atomize_keys/1`
+- `stringify_keys/1`
+- `underscore_keys/1`
+
+Check out [the docs](https://hexdocs.pm/key_tools/api-reference.html) for full details.
+
 ## Installation
 
 How to install from [Hex](https://hex.pm/packages/key_tools):

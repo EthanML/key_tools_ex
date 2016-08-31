@@ -59,4 +59,22 @@ defmodule KeyTools do
   end
 
   def underscore_keys(anything), do: anything
+
+  @doc """
+  Deeply converts all keys within the given `Map` or `List` to strings.
+
+  ## Examples
+
+  iex(1)> stringify_keys %{atom_key: :atom_value}
+  %{"atom_key" => :atom_value}
+
+  iex(2)> stringify_keys [%{atom_key: %{42 => [%{another_key: 23}]}}]
+  [%{"atom_key" => %{"42" => [%{"another_key" => 23}]}}]
+  """
+  def stringify_keys(map) when is_map(map) do
+    for {key, value} <- map, into: %{}, do: {to_string(key), stringify_keys(value)}
+  end
+
+  def stringify_keys(list) when is_list(list), do: Enum.map list, &stringify_keys/1
+  def stringify_keys(anything), do: anything
 end

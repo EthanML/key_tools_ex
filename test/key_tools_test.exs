@@ -57,4 +57,40 @@ defmodule KeyToolsTest do
     end
   end
 
+  describe "KeyTools.stringify_keys/1" do
+    test "stringifies atom keys" do
+      atom_keys = %{atom_key: :not_a_string}
+      string_keys = %{"atom_key" => :not_a_string}
+      assert KeyTools.stringify_keys(atom_keys) == string_keys
+    end
+
+    test "stringifies number keys" do
+      number_keys = %{42 => :not_a_string}
+      string_keys = %{"42" => :not_a_string}
+      assert KeyTools.stringify_keys(number_keys) == string_keys
+    end
+
+    test "stringifies keys in nested maps" do
+      nested_keys = %{atom_key: %{69 => 71}}
+      nested_string_keys = %{"atom_key" => %{"69" => 71}}
+      assert KeyTools.stringify_keys(nested_keys) == nested_string_keys
+    end
+
+    test "stringifies maps inside a list" do
+      list_keys = [%{atom_key: %{another_one: [%{deeper: :still}]}}]
+      string_list_keys = [%{"atom_key" => %{"another_one" => [%{"deeper" => :still}]}}]
+      assert KeyTools.stringify_keys(list_keys) == string_list_keys
+    end
+
+    test "does nothing with empty collections" do
+      assert stringify_keys([]) == []
+      assert stringify_keys(%{}) == %{}
+    end
+
+    test "returns other input types unchanged" do
+      assert stringify_keys(:atom) == :atom
+      assert stringify_keys(42) == 42
+      assert stringify_keys("string") == "string"
+    end
+  end
 end
