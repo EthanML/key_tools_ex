@@ -38,13 +38,7 @@ defmodule KeyTools do
   [%{"nested_keys" => %{"great_success" => ":)"}}]
   """
   def underscore_keys(map) when is_map(map) do
-    for {key, value} <- map, into: %{} do
-      if is_binary(key) do
-        {Macro.underscore(key), underscore_keys(value)}
-      else
-        {underscore_keys(key), underscore_keys(value)}
-      end
-    end
+    transform_map(map, &Macro.underscore/1, &underscore_keys/1)
   end
 
   def underscore_keys(atom) when is_atom(atom) do
@@ -76,13 +70,7 @@ defmodule KeyTools do
   %{"snakeKey" => "is a snake"}
   """
   def camelize_keys(map) when is_map(map) do
-    for {key, value} <- map, into: %{} do
-      if is_binary(key) do
-        {Macro.camelize(key), camelize_keys(value)}
-      else
-        {camelize_keys(key), camelize_keys(value)}
-      end
-    end
+    transform_map(map, &Macro.camelize/1, &camelize_keys/1)
   end
 
   def camelize_keys(atom) when is_atom(atom) do
@@ -105,7 +93,10 @@ defmodule KeyTools do
     end
   end
 
-  def camelize_keys(list, lower_initial_character = true) when is_list(list), do: Enum.map list, fn (value) -> camelize_keys(value, lower_initial_character) end
+  def camelize_keys(list, lower_initial_character = true) when is_list(list) do
+    Enum.map list, fn (value) -> camelize_keys(value, lower_initial_character) end
+  end
+
   def camelize_keys(anything, _), do: anything
 
   defp lower_camelize(string) when is_binary(string) do
@@ -137,4 +128,14 @@ defmodule KeyTools do
 
   def stringify_keys(list) when is_list(list), do: Enum.map list, &stringify_keys/1
   def stringify_keys(anything), do: anything
+
+  defp transform_map(map, individual_key_func, collection_key_func) do
+    for {key, value} <- map, into: %{} do
+      if is_binary(key) do
+        {individual_key_func.(key), collection_key_func.(value)}
+      else
+        {collection_key_func.(key), collection_key_func.(value)}
+      end
+    end
+  end
 end
