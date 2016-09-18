@@ -44,6 +44,7 @@ Current functions include:
 - `atomize_keys/1`
 - `stringify_keys/1`
 - `underscore_keys/1`
+- `camelize_keys/1` / `camelize_keys/2`
 
 Check out [the docs](https://hexdocs.pm/key_tools/api-reference.html) for full details.
 
@@ -55,7 +56,7 @@ How to install from [Hex](https://hex.pm/packages/key_tools):
 
     ```elixir
     def deps do
-      [{:key_tools, "~> 0.2"}]
+      [{:key_tools, "~> 0.3"}]
     end
     ```
 
