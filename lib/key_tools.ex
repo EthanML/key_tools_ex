@@ -26,7 +26,7 @@ defmodule KeyTools do
 
   Affects only keys; values will remain unchanged. Works on string and atom keys.
 
-  The same limitations detailed in the docs for `Macro.Underscore` apply here,
+  The same limitations detailed in the docs for `Macro.underscore` apply here,
   so be careful if there is potential for non-standard characters within your keys.
 
   ## Examples
@@ -56,6 +56,42 @@ defmodule KeyTools do
 
   def underscore_keys(list) when is_list(list), do: Enum.map list, &underscore_keys/1
   def underscore_keys(anything), do: anything
+
+  @doc """
+  Deeply converts all snake_cased keys within the given `Map` or `List` to camelCase.
+
+  Affects only keys; values will remain unchanged. Works on string and atom keys.
+
+  The same limitations detailed in the docs for `Macro.camelize` apply here,
+  so be careful if there is potential for non-standard characters within your keys.
+
+  ## Examples
+
+  iex(1)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}
+  %{"SnakeKey" => "is a snake"}
+
+  iex(2)> KeyTools.camelize_keys [%{"nested_keys" => %{"great_success" => ":)"}}]
+  [%{"NestedKeys" => %{"GreatSuccess" => ":)"}}]
+  """
+  def camelize_keys(map) when is_map(map) do
+    for {key, value} <- map, into: %{} do
+      if is_binary(key) do
+        {Macro.camelize(key), camelize_keys(value)}
+      else
+        {camelize_keys(key), camelize_keys(value)}
+      end
+    end
+  end
+
+  def camelize_keys(atom) when is_atom(atom) do
+    atom
+    |> Atom.to_string
+    |> Macro.camelize
+    |> String.to_atom
+  end
+
+  def camelize_keys(list) when is_list(list), do: Enum.map list, &camelize_keys/1
+  def camelize_keys(anything), do: anything
 
   @doc """
   Deeply converts all keys within the given `Map` or `List` to strings.

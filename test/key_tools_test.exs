@@ -28,32 +28,62 @@ defmodule KeyToolsTest do
   end
 
   describe "KeyTools.underscore_keys/1" do
-    test "converts a map's string keys to snake case" do
+    test "converts a map's string keys to snake_case" do
       camel_keys = %{"camelKeyOne" => "String val", "camelKeyTwo" => 2}
       snake_keys = %{"camel_key_one" => "String val", "camel_key_two" => 2}
       assert underscore_keys(camel_keys) == snake_keys
     end
 
-    test "snake cases keys in nested maps" do
+    test "snake_cases keys in nested maps" do
       camel_keys = %{"camelKeyOne" => 1, "camelKeyTwo" => %{"camelKeyThree" => 3}}
       snake_keys = %{"camel_key_one" => 1, "camel_key_two" => %{"camel_key_three" => 3}}
       assert underscore_keys(camel_keys) == snake_keys
     end
 
-    test "snake cases maps inside a list" do
+    test "snake_cases maps inside a list" do
       camel_keys = %{"camelKeyOne" => 1, "camelKeyTwo" => [%{"camelKeyThree" => 3}]}
       snake_keys = %{"camel_key_one" => 1, "camel_key_two" => [%{"camel_key_three" => 3}]}
       assert underscore_keys(camel_keys) == snake_keys
     end
 
-    test "snakes cases atom keys" do
+    test "snakes_cases atom keys" do
       camel_keys = %{camelKeyOne: 1, camelKeyTwo: 2}
       snake_keys = %{camel_key_one: 1, camel_key_two: 2}
       assert underscore_keys(camel_keys) == snake_keys
     end
 
     test "returns other input types unchanged" do
-      assert underscore_keys("camel_string") == "camel_string"
+      assert underscore_keys("camelString") == "camelString"
+    end
+  end
+
+  describe "KeyTools.camelize_keys/1" do
+    test "converts a map's string keys to CamelCase" do
+      snake_keys = %{"snake_key_one" => "String val", "snake_key_two" => 2}
+      camel_keys = %{"SnakeKeyOne" => "String val", "SnakeKeyTwo" => 2}
+      assert camelize_keys(snake_keys) == camel_keys
+    end
+
+    test "camelizes keys in nested maps" do
+      snake_keys = %{"snake_key_one" => 1, "snake_key_two" => %{"snake_key_three" => 3}}
+      camel_keys = %{"SnakeKeyOne" => 1, "SnakeKeyTwo" => %{"SnakeKeyThree" => 3}}
+      assert camelize_keys(snake_keys) == camel_keys
+    end
+
+    test "camelizes maps inside a list" do
+      snake_keys = %{"snake_key_one" => 1, "snake_key_two" => [%{"snake_key_three" => 3}]}
+      camel_keys = %{"SnakeKeyOne" => 1, "SnakeKeyTwo" => [%{"SnakeKeyThree" => 3}]}
+      assert camelize_keys(snake_keys) == camel_keys
+    end
+
+    test "camelizes cases atom keys" do
+      snake_keys = %{snake_key_one: 1, snake_key_two: 2}
+      camel_keys = %{SnakeKeyOne: 1, SnakeKeyTwo: 2}
+      assert camelize_keys(snake_keys) == camel_keys
+    end
+
+    test "returns other input types unchanged" do
+      assert camelize_keys("snake_string") == "snake_string"
     end
   end
 
