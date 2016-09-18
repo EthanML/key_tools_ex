@@ -53,8 +53,6 @@ defmodule KeyTools do
 
   @doc """
   Deeply converts all snake_cased keys within the given `Map` or `List` to CamelCase.
-  To convert to lowerCamelCasing, pass the additional `lower_initial_character`
-  param as `true`.
 
   Affects only keys; values will remain unchanged. Works on string and atom keys.
 
@@ -65,9 +63,6 @@ defmodule KeyTools do
 
   iex(1)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}
   %{"SnakeKey" => "is a snake"}
-
-  iex(2)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}, true
-  %{"snakeKey" => "is a snake"}
   """
   def camelize_keys(map) when is_map(map) do
     transform_map(map, &Macro.camelize/1, &camelize_keys/1)
@@ -83,18 +78,28 @@ defmodule KeyTools do
   def camelize_keys(list) when is_list(list), do: Enum.map list, &camelize_keys/1
   def camelize_keys(anything), do: anything
 
-  def camelize_keys(map, lower_initial_character = true) when is_map(map) do
+  @doc """
+  Deeply converts all snake_cased keys within the given `Map` or `List` to lowerCamelCase.
+
+  For full details see the docs for `KeyTools.camelize_keys/1`.
+
+  ## Examples
+
+  iex(1)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}, true
+  %{"snakeKey" => "is a snake"}
+  """
+  def camelize_keys(map, true) when is_map(map) do
     for {key, value} <- map, into: %{} do
       if is_binary(key) do
-        {lower_camelize(key), camelize_keys(value, lower_initial_character)}
+        {lower_camelize(key), camelize_keys(value, true)}
       else
-        {lower_camelize(key), camelize_keys(value, lower_initial_character)}
+        {lower_camelize(key), camelize_keys(value, true)}
       end
     end
   end
 
-  def camelize_keys(list, lower_initial_character = true) when is_list(list) do
-    Enum.map list, fn (value) -> camelize_keys(value, lower_initial_character) end
+  def camelize_keys(list, true) when is_list(list) do
+    Enum.map list, fn (value) -> camelize_keys(value, true) end
   end
 
   def camelize_keys(anything, _), do: anything
