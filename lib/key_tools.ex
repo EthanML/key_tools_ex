@@ -58,7 +58,9 @@ defmodule KeyTools do
   def underscore_keys(anything), do: anything
 
   @doc """
-  Deeply converts all snake_cased keys within the given `Map` or `List` to camelCase.
+  Deeply converts all snake_cased keys within the given `Map` or `List` to CamelCase.
+  To convert to lowerCamelCasing, pass the additional `lower_initial_character`
+  param as `true`.
 
   Affects only keys; values will remain unchanged. Works on string and atom keys.
 
@@ -70,8 +72,8 @@ defmodule KeyTools do
   iex(1)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}
   %{"SnakeKey" => "is a snake"}
 
-  iex(2)> KeyTools.camelize_keys [%{"nested_keys" => %{"great_success" => ":)"}}]
-  [%{"NestedKeys" => %{"GreatSuccess" => ":)"}}]
+  iex(2)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}, true
+  %{"snakeKey" => "is a snake"}
   """
   def camelize_keys(map) when is_map(map) do
     for {key, value} <- map, into: %{} do
@@ -92,6 +94,31 @@ defmodule KeyTools do
 
   def camelize_keys(list) when is_list(list), do: Enum.map list, &camelize_keys/1
   def camelize_keys(anything), do: anything
+
+  def camelize_keys(map, lower_initial_character = true) when is_map(map) do
+    for {key, value} <- map, into: %{} do
+      if is_binary(key) do
+        {lower_camelize(key), camelize_keys(value, lower_initial_character)}
+      else
+        {lower_camelize(key), camelize_keys(value, lower_initial_character)}
+      end
+    end
+  end
+
+  def camelize_keys(list, lower_initial_character = true) when is_list(list), do: Enum.map list, fn (value) -> camelize_keys(value, lower_initial_character) end
+  def camelize_keys(anything, _), do: anything
+
+  defp lower_camelize(string) when is_binary(string) do
+    upperCamelized = Macro.camelize string
+    "#{String.downcase(String.first(upperCamelized))}#{String.slice(upperCamelized, 1..-1)}"
+  end
+
+  defp lower_camelize(atom) when is_atom(atom) do
+    atom
+    |> Atom.to_string
+    |> lower_camelize
+    |> String.to_atom
+  end
 
   @doc """
   Deeply converts all keys within the given `Map` or `List` to strings.

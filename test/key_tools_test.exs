@@ -85,6 +85,12 @@ defmodule KeyToolsTest do
     test "returns other input types unchanged" do
       assert camelize_keys("snake_string") == "snake_string"
     end
+
+    test "can also convert to lowerCamelCase" do
+      snake_keys = %{snake_key_one: 1, snake_key_two: %{snake_key_three: 3}}
+      lower_camel_keys = %{snakeKeyOne: 1, snakeKeyTwo: %{snakeKeyThree: 3}}
+      assert camelize_keys(snake_keys, true) == lower_camel_keys
+    end
   end
 
   describe "KeyTools.stringify_keys/1" do
