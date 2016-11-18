@@ -22,7 +22,8 @@ defmodule KeyTools.Mixfile do
   defp deps do
     [
       {:mix_test_watch, "~> 0.2", only: :dev},
-      {:ex_doc, "~> 0.12", only: :dev}
+      {:ex_doc, "~> 0.12", only: :dev},
+      {:decimal, "~> 1.0", only: :test}
     ]
   end
 

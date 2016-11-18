@@ -128,5 +128,10 @@ defmodule KeyToolsTest do
       assert stringify_keys(42) == 42
       assert stringify_keys("string") == "string"
     end
+
+    test "ignores structs from being altered" do
+      decimal = Decimal.new(7)
+      assert stringify_keys(decimal) == decimal
+    end
   end
 end
