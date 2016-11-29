@@ -14,6 +14,8 @@ defmodule KeyTools do
   iex(2)> KeyTools.atomize_keys [%{"nested_data" => %{"deep" => :stuff}}]
   [%{nested_data: %{deep: :stuff}}]
   """
+  def atomize_keys(%{__struct__: _} = struct), do: struct
+
   def atomize_keys(map) when is_map(map) do
     for {key, value} <- map, into: %{}, do: {String.to_atom(key), atomize_keys(value)}
   end
@@ -37,6 +39,8 @@ defmodule KeyTools do
   iex(2)> KeyTools.underscore_keys [%{"nestedKeys" => %{"greatSuccess" => ":)"}}]
   [%{"nested_keys" => %{"great_success" => ":)"}}]
   """
+  def underscore_keys(%{__struct__: _} = struct), do: struct
+
   def underscore_keys(map) when is_map(map) do
     transform_map(map, &Macro.underscore/1, &underscore_keys/1)
   end
@@ -64,6 +68,8 @@ defmodule KeyTools do
   iex(1)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}
   %{"SnakeKey" => "is a snake"}
   """
+  def camelize_keys(%{__struct__: _} = struct), do: struct
+
   def camelize_keys(map) when is_map(map) do
     transform_map(map, &Macro.camelize/1, &camelize_keys/1)
   end
@@ -88,6 +94,8 @@ defmodule KeyTools do
   iex(1)> KeyTools.camelize_keys %{"snake_key" => "is a snake"}, true
   %{"snakeKey" => "is a snake"}
   """
+  def camelize_keys(%{__struct__: _} = struct, true), do: struct
+
   def camelize_keys(map, true) when is_map(map) do
     for {key, value} <- map, into: %{} do
       if is_binary(key) do
@@ -127,7 +135,8 @@ defmodule KeyTools do
   iex(2)> stringify_keys [%{atom_key: %{42 => [%{another_key: 23}]}}]
   [%{"atom_key" => %{"42" => [%{"another_key" => 23}]}}]
   """
-  def stringify_keys(%{__struct__: _}=struct), do: struct
+  def stringify_keys(%{__struct__: _} = struct), do: struct
+
   def stringify_keys(map) when is_map(map) do
     for {key, value} <- map, into: %{}, do: {to_string(key), stringify_keys(value)}
   end
