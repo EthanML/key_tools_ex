@@ -68,3 +68,8 @@ How to install from [Hex](https://hex.pm/packages/key_tools):
     end
     ```
 
+## How to Contribute
+
+If you'd like to contribute to the project (thanks in advance!) please pull the `dev` branch, then create another branch off of `dev` with your changes. Then, just push your branch and create a Pull Request against `dev` for review.
+
+Alternatively, feel free to write up an Issue.
