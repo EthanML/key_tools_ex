@@ -127,6 +127,7 @@ defmodule KeyTools do
   iex(2)> stringify_keys [%{atom_key: %{42 => [%{another_key: 23}]}}]
   [%{"atom_key" => %{"42" => [%{"another_key" => 23}]}}]
   """
+  def stringify_keys(%{__struct__: _}=struct), do: struct
   def stringify_keys(map) when is_map(map) do
     for {key, value} <- map, into: %{}, do: {to_string(key), stringify_keys(value)}
   end
