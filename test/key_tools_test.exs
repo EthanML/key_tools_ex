@@ -25,6 +25,11 @@ defmodule KeyToolsTest do
     test "returns other input types unchanged" do
       assert atomize_keys("string") == "string"
     end
+
+    test "does not attempt to atomize structs" do
+      decimal = Decimal.new(3)
+      assert atomize_keys(decimal) == decimal
+    end
   end
 
   describe "KeyTools.underscore_keys/1" do
@@ -54,6 +59,11 @@ defmodule KeyToolsTest do
 
     test "returns other input types unchanged" do
       assert underscore_keys("camelString") == "camelString"
+    end
+
+    test "does not attempt to snake_case structs" do
+      decimal = Decimal.new(4)
+      assert underscore_keys(decimal) == decimal
     end
   end
 
@@ -86,9 +96,14 @@ defmodule KeyToolsTest do
       assert camelize_keys("snake_string") == "snake_string"
     end
 
+    test "does not attempt to camelize structs" do
+      decimal = Decimal.new(6)
+      assert camelize_keys(decimal) == decimal
+    end
+
     test "can also convert to lowerCamelCase" do
-      snake_keys = %{snake_key_one: 1, snake_key_two: %{snake_key_three: 3}}
-      lower_camel_keys = %{snakeKeyOne: 1, snakeKeyTwo: %{snakeKeyThree: 3}}
+      snake_keys = %{snake_key_one: Decimal.new(5), snake_key_two: %{snake_key_three: 3}}
+      lower_camel_keys = %{snakeKeyOne: Decimal.new(5), snakeKeyTwo: %{snakeKeyThree: 3}}
       assert camelize_keys(snake_keys, true) == lower_camel_keys
     end
   end
@@ -129,7 +144,7 @@ defmodule KeyToolsTest do
       assert stringify_keys("string") == "string"
     end
 
-    test "ignores structs from being altered" do
+    test "does not attempt to stringify structs" do
       decimal = Decimal.new(7)
       assert stringify_keys(decimal) == decimal
     end
