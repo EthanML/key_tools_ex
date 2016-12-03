@@ -1,0 +1,10 @@
+---
+engines:
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - lib/**
+exclude_paths:
+- config/
+- test/
