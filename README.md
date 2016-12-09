@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/EthanML/key_tools_ex/badges/gpa.svg)](https://codeclimate.com/github/EthanML/key_tools_ex)
+
 # KeyTools
 
 Simple functions for coercing Elixir Maps (or Lists of Maps).
