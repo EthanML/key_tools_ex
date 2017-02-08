@@ -30,6 +30,11 @@ defmodule KeyToolsTest do
       decimal = Decimal.new(3)
       assert atomize_keys(decimal) == decimal
     end
+
+    test "returns existing atom-keys unchanged" do
+      atom_keys = %{a: "atom"}
+      assert atomize_keys(atom_keys) == atom_keys
+    end
   end
 
   describe "KeyTools.underscore_keys/1" do
