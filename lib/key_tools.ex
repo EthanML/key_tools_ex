@@ -17,7 +17,9 @@ defmodule KeyTools do
   def atomize_keys(%{__struct__: _} = struct), do: struct
 
   def atomize_keys(map) when is_map(map) do
-    for {key, value} <- map, into: %{}, do: {String.to_atom(key), atomize_keys(value)}
+    for {key, value} <- map, into: %{} do
+      if is_atom(key), do: {key, atomize_keys(value)}, else: {String.to_atom(key), atomize_keys(value)}
+    end
   end
 
   def atomize_keys(list) when is_list(list), do: Enum.map list, &atomize_keys/1
